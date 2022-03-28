@@ -29,22 +29,22 @@ public class Attribute {
     //@JsonIgnore
     private List<Parameter> parameters;
 
-    /*@ManyToMany
+    @ManyToMany
     @JoinTable(
             name = "object_attribute",
             joinColumns = @JoinColumn(name = "attribute_id"),
             inverseJoinColumns = @JoinColumn(name = "object_id"))
-    List<Object> objects;*/
+    List<Object> objects;
 
-    @OneToMany(mappedBy = "attribute")
-    List<ObjectAttribute> objectAttributes;
+/*    @OneToMany(mappedBy = "attribute")
+    List<ObjectAttribute> objectAttributes;*/
 
-    /*@ManyToMany
+    @ManyToMany
     @JoinTable(name ="objectTypes_attribute",
                joinColumns = @JoinColumn(name = "objectType_id"),
                inverseJoinColumns = @JoinColumn(name = "attribute_id"))
-    List<ObjectType> objectTypes;*/
+    List<ObjectType> objectTypes;
 
-    @OneToMany(mappedBy = "attribute")
-    List<ObjectTypeAttribute> objectTypeAttributes;
+    /*@OneToMany(mappedBy = "attribute")
+    List<ObjectTypeAttribute> objectTypeAttributes;*/
 }

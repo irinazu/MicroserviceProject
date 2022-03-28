@@ -1,5 +1,5 @@
 package com.courseproject.microservice.repository;
-
+/*
 
 import com.courseproject.microservice.model.ObjectAttribute;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,3 +11,4 @@ public interface ObjectAttributeRepository extends JpaRepository<ObjectAttribute
     @Override
     List<ObjectAttribute> findAll();
 }
+*/

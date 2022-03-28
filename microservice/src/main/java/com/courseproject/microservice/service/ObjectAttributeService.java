@@ -1,5 +1,5 @@
 package com.courseproject.microservice.service;
-
+/*
 import com.courseproject.microservice.model.Attribute;
 import com.courseproject.microservice.model.Object;
 import com.courseproject.microservice.model.ObjectAttribute;
@@ -13,3 +13,4 @@ public interface ObjectAttributeService {
     List<ObjectAttribute> getAllObjectAttribute();
 
 }
+*/

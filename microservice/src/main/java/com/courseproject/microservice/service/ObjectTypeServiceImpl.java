@@ -6,6 +6,7 @@ import com.courseproject.microservice.repository.ObjectTypeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ObjectTypeServiceImpl implements ObjectTypeService{
@@ -27,7 +28,7 @@ public class ObjectTypeServiceImpl implements ObjectTypeService{
     }
 
     @Override
-    public ObjectType getObjectType(Long id) {
-        return objectTypeRepository.getById(id);
+    public Optional<ObjectType> getById(Long id) {
+        return objectTypeRepository.findById(id);
     }
 }

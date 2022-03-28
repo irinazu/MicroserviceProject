@@ -15,4 +15,7 @@ public interface ParameterService {
 
     Optional<Parameter> findById(Long id);
 
+    void deleteParameter(Long id);
+
+    void saveAll(List<Parameter> parameters);
 }

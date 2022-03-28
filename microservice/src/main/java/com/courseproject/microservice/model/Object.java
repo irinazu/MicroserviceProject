@@ -36,8 +36,8 @@ public class Object {
 
     private ObjectType objectType=null;
 
-    /*@ManyToMany(mappedBy = "objects")
-    List<Attribute> attributes;*/
-    @OneToMany(mappedBy = "object")
-    List<ObjectAttribute> objectAttributes;
+    @ManyToMany(mappedBy = "objects")
+    List<Attribute> attributes;
+    /*@OneToMany(mappedBy = "object")
+    List<ObjectAttribute> objectAttributes;*/
 }

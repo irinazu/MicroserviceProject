@@ -22,6 +22,11 @@ public class ObjectServiceImpl implements ObjectService{
     }
 
     @Override
+    public void deleteObject(Long id) {
+        objectRepository.deleteById(id);
+    }
+
+    @Override
     public List<Object> getAllObjects() {
         return objectRepository.findAll();
     }

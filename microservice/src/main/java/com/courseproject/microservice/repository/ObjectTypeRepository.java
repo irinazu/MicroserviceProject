@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ObjectTypeRepository extends JpaRepository<ObjectType,Long> {
@@ -24,8 +25,9 @@ public interface ObjectTypeRepository extends JpaRepository<ObjectType,Long> {
     @Transactional
     List<ObjectType> findAllByDescription(String desc);
 
+    @Override
+    Optional<ObjectType> findById(Long aLong);
 
-
-    /*@Query("update ObjectType t set t.value = :value where t.id = :id")
+/*@Query("update ObjectType t set t.value = :value where t.id = :id")
     int setValue(@Param("id") Long id, @Param("value") String value);*/
 }

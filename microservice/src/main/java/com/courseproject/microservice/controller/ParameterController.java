@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/parameters")
+@CrossOrigin
 public class ParameterController {
     ParameterService parameterService;
 
@@ -18,10 +19,7 @@ public class ParameterController {
         super();
         this.parameterService = parameterService;
     }
-    @PostMapping
-    Parameter saveParameter(@RequestBody Parameter parameter){
-        return parameterService.saveParameter(parameter);
-    }
+
     @GetMapping("{id}")
     Parameter getParameter(@PathVariable("id") Long id){
         Optional<Parameter> opt=parameterService.findById(id);
@@ -34,5 +32,18 @@ public class ParameterController {
     @GetMapping
     List<Parameter> parameterList(){
         return parameterService.getAllParameters();
+    }
+
+    @PutMapping("{id}")
+    Parameter updateParameter(@PathVariable("id") Long id,@RequestBody Parameter parameterChance){
+        Optional<Parameter> opt=parameterService.findById(id);
+        if(opt.isPresent()){
+            Parameter parameter=opt.get();
+            parameter.setName(parameterChance.getName());
+            parameter.setValue(parameterChance.getValue());
+            parameter.setDate_value(parameterChance.getDate_value());
+            return parameterService.saveParameter(parameter);
+        }
+        return null;
     }
 }

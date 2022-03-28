@@ -1,5 +1,5 @@
 package com.courseproject.microservice.service;
-
+/*
 import com.courseproject.microservice.model.ObjectAttribute;
 import com.courseproject.microservice.repository.ObjectAttributeRepository;
 import org.springframework.stereotype.Service;
@@ -25,3 +25,4 @@ public class ObjectAttributeServiceImpl implements ObjectAttributeService{
         return attributeRepository.findAll();
     }
 }
+*/

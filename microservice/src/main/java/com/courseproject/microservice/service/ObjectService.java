@@ -14,4 +14,5 @@ public interface ObjectService {
 
     Optional<Object> getObject(Long id);
 
+    void deleteObject(Long id);
 }

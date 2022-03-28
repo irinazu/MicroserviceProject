@@ -33,4 +33,15 @@ public class ParameterServiceImpl implements ParameterService{
     public Optional<Parameter> findById(Long id) {
         return parameterRepository.findById(id);
     }
+
+    @Override
+    public void deleteParameter(Long id) {
+        parameterRepository.deleteById(id);
+    }
+
+    @Override
+    public void saveAll(List<Parameter> parameters) {
+        parameterRepository.saveAll(parameters);
+    }
+
 }

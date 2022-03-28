@@ -1,4 +1,4 @@
-package com.courseproject.microservice.service;
+/*package com.courseproject.microservice.service;
 
 import com.courseproject.microservice.model.ObjectTypeAttribute;
 import com.courseproject.microservice.repository.ObjectTypeAttributeRepository;
@@ -27,3 +27,4 @@ public class ObjectTypeAttributeServiceImpl implements ObjectTypeAttributeServic
         return objectTypeRepository.findAll();
     }
 }
+*/

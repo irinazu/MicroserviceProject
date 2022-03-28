@@ -27,5 +27,6 @@ public interface ObjectRepository extends JpaRepository<Object,Long> {
     @Transactional
     List<Object> findAllByDescription(String desc);
 
-
+    @Override
+    void deleteById(Long aLong);
 }

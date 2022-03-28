@@ -1,5 +1,5 @@
 package com.courseproject.microservice.controller;
-
+/*
 import com.courseproject.microservice.model.Object;
 import com.courseproject.microservice.model.ObjectAttribute;
 import com.courseproject.microservice.service.ObjectAttributeService;
@@ -28,4 +28,4 @@ public class ObjectAttributeController {
     List<ObjectAttribute> getAllObject(){
         return attributeService.getAllObjectAttribute();
     }
-}
+}*/

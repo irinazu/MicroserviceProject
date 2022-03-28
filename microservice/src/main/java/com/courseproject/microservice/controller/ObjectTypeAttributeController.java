@@ -1,5 +1,5 @@
 package com.courseproject.microservice.controller;
-
+/*
 import com.courseproject.microservice.model.ObjectTypeAttribute;
 import com.courseproject.microservice.service.ObjectTypeAttributeService;
 import org.springframework.web.bind.annotation.*;
@@ -27,3 +27,4 @@ public class ObjectTypeAttributeController {
     }
 
 }
+*/

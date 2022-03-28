@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 
 import javax.persistence.*;
-
+/*
 @Entity
 @Data
 @Table(name = "objectType_attribute")
@@ -27,3 +27,4 @@ public class ObjectTypeAttribute {
     private Attribute attribute;
 
 }
+*/

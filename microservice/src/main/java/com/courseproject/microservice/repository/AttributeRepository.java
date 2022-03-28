@@ -16,4 +16,7 @@ public interface AttributeRepository extends JpaRepository<Attribute,Long> {
 
     @Transactional
     List<Attribute> findAllByName(String name);
+
+    /*@Override
+    <S extends Attribute> List<S> saveAll(Iterable<S> entities);*/
 }

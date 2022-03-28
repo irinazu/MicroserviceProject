@@ -35,10 +35,10 @@ public class ObjectType {
     //@JsonIgnore
     private List<Object> objects=null;
 
-    /*@ManyToMany(mappedBy = "objectTypes")
-    List<Attribute> attributes;*/
+    @ManyToMany(mappedBy = "objectTypes")
+    List<Attribute> attributes;
 
-    @OneToMany(mappedBy = "objectType")
-    List<ObjectTypeAttribute> objectTypeAttributes;
+    /*@OneToMany(mappedBy = "objectType")
+    List<ObjectTypeAttribute> objectTypeAttributes;*/
 }
 
