@@ -5,30 +5,45 @@ import com.courseproject.microservice.model.Object;
 import com.courseproject.microservice.model.ObjectType;
 import com.courseproject.microservice.model.Parameter;
 import com.courseproject.microservice.service.*;
+//import org.apache.logging.log4j.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/types")
 @CrossOrigin
 public class ObjectTypeController {
+    private static final Logger logger= LoggerFactory.getLogger(ObjectTypeController.class);
+    private final ObjectMapper mapper;
+
     ObjectTypeService objectTypeService;
     AttributeService attributeService;
     ParameterService parameterService;
 
-    ObjectTypeController(ObjectTypeService objectTypeService,AttributeService attributeService,ParameterService parameterService){
+    ObjectTypeController(ObjectTypeService objectTypeService,AttributeService attributeService,
+                         ParameterService parameterService,ObjectMapper mapper){
         super();
         this.objectTypeService=objectTypeService;
         this.attributeService=attributeService;
         this.parameterService=parameterService;
+        this.mapper=mapper;
 
     }
 
     @PostMapping
-    ObjectType saveObject(@RequestBody ObjectType object){
+    ObjectType saveObjectType(@RequestBody ObjectType object){
+        logger.info("Enter in method saveObjectType()");
+        logger.info("ObjectType {}", object);
+
+        if(object.getParentId()!=null&&objectTypeService.getById(object.getParentId()).isPresent()){
+            ObjectType parent=objectTypeService.getById(object.getParentId()).get();
+            object.setParent_id(parent);
+        }
         objectTypeService.saveObjectType(object);
 
         if (object.getAttributes()!=null){
@@ -52,82 +67,133 @@ public class ObjectTypeController {
                 }
             }
         }
+        logger.info("Go out from method saveObjectType()");
         return object;
     }
 
     @GetMapping
-    List<ObjectType> getAllObjectType(){
+    List<ObjectType> getAllObjectType() throws JsonProcessingException {
+        logger.info("Enter in method getAllObjectType()");
+        logger.info("List<ObjectType> {}", mapper.writeValueAsString(objectTypeService.getAllObjectType()));
+        logger.info("Go out from method getAllObjectType()");
+
         return objectTypeService.getAllObjectType();
     }
 
     @GetMapping("{id}")
-    ObjectType getObjectTypeById(@PathVariable("id") Long id){
-        return objectTypeService.getById(id).get();
+    ObjectType getObjectTypeById(@PathVariable("id") Long id) throws JsonProcessingException {
+        logger.info("Enter in method getObjectTypeById()");
+        logger.info("objectType {}",mapper.writeValueAsString(objectTypeService.getById(id).get()));
+
+        if(objectTypeService.getById(id).isPresent()){
+            logger.info("Go out from method getObjectTypeById()");
+
+            return objectTypeService.getById(id).get();
+        }
+        logger.info("Go out from method getObjectTypeById()");
+
+        return null;
     }
 
     @PutMapping("{id}")
-    ObjectType updateObjectType(@PathVariable("id") Long id,@RequestBody ObjectType objectTypeChance){
-        ObjectType objectType=objectTypeService.getById(id).get();
-        if(objectType!=null){
-            objectType.setName(objectTypeChance.getName());
-            objectType.setDescription(objectTypeChance.getDescription());
+    ObjectType updateObjectType(@PathVariable("id") Long id,
+                                @RequestBody ObjectType objectTypeChange){
+        logger.info("Enter in method updateObjectType()");
+        logger.info("ObjectType{}", objectTypeChange);
+
+        if(objectTypeService.getById(id).isPresent()){
+            ObjectType objectType=objectTypeService.getById(id).get();
+            objectType.setName(objectTypeChange.getName());
+            objectType.setDescription(objectTypeChange.getDescription());
+            if(objectTypeChange.getParentId()!=null&&objectTypeService.getById(objectTypeChange.getParentId()).isPresent()){
+                ObjectType parent=objectTypeService.getById(objectTypeChange.getParentId()).get();
+                objectType.setParent_id(parent);
+            }
+            logger.info("Go out from method getObjectTypeById()");
+
             return objectTypeService.saveObjectType(objectType);
         }
+        logger.info("Go out from method updateObjectType()");
+
         return null;
     }
 
-    @PutMapping("/addAttribute/{idObT}")
-    ObjectType createAttributeForObjectType(@PathVariable("idObT") Long id,@RequestBody List<Attribute> attributes){
-        ObjectType objectType=objectTypeService.getById(id).get();
-        List<ObjectType> objectTypes=new ArrayList<>();
-        objectTypes.add(objectType);
+    @PutMapping("/createAttributeFor/{idObT}")
+    ObjectType createAttributeForObjectType(@PathVariable("idObT") Long id,
+                                            @RequestBody List<Attribute> attributes) throws JsonProcessingException {
+        logger.info("Enter in method createAttributeForObjectType()");
+        logger.info("ObjectType {}",mapper.writeValueAsString(objectTypeService.getById(id).get()));
+        logger.info("List<Attribute> {}", attributes);
 
-        List<Attribute> attributeList=new ArrayList<>();
-
-        for(int i=0;i<attributes.size();i++){
-            attributes.get(i).setObjectTypes(objectTypes);
-            attributeList.add(attributeService.saveAttribute(attributes.get(i)));
-        }
-        objectType.setAttributes(attributeList);
-        return objectTypeService.saveObjectType(objectType);
-    }
-
-    @PutMapping("/addAttribute/{idObT}/{idAt}")
-    ObjectType addAttributeInObjectType(@PathVariable("idObT") Long idObT,
-                                             @PathVariable("idAt") Long idAt) {
-
-        if(attributeService.findById(idAt).isPresent()&&objectTypeService.getById(idObT).isPresent()){
-            Attribute attribute=attributeService.findById(idAt).get();
-            ObjectType objectType=objectTypeService.getById(idObT).get();
+        if(objectTypeService.getById(id).isPresent()){
+            ObjectType objectType=objectTypeService.getById(id).get();
             List<ObjectType> objectTypes=new ArrayList<>();
             objectTypes.add(objectType);
-            List<Attribute> attributes=new ArrayList<>();
-            attributes.add(attribute);
 
-            attribute.setObjectTypes(objectTypes);
-            attributeService.saveAttribute(attribute);
+            List<Attribute> attributeList=new ArrayList<>();
 
-            objectType.setAttributes(attributes);
-            objectTypeService.saveObjectType(objectType);
-            return objectType;
+            for (Attribute attribute : attributes) {
+                attribute.setObjectTypes(objectTypes);
+                attributeList.add(attributeService.saveAttribute(attribute));
+            }
+            objectType.setAttributes(attributeList);
+
+            logger.info("Go out from method createAttributeForObjectType()");
+
+            return objectTypeService.saveObjectType(objectType);
         }
+        logger.info("Go out from method createAttributeForObjectType()");
+
         return null;
     }
-    /*@PutMapping("/addParameter/{idAt}")
-    Attribute updateObjectTypeAddParameters(@PathVariable("idAt") Long id,
-                                             @RequestBody List<Parameter> parameters){
 
-        Attribute attribute=attributeService.findById(id).get();
-        List<Attribute> attributes=new ArrayList<>();
-        attributes.add(attribute);
+    @PutMapping("/addAttributeIn/{idObT}")
+    public ObjectType addAttributeInObjectType(@PathVariable("idObT") Long idObT,
+                                               @RequestBody List<Long> attributesId)
+                                                 throws JsonProcessingException {
+        logger.info("Enter in method addAttributeInObjectType()");
+        logger.info("ObjectType {}",mapper.writeValueAsString(objectTypeService.getById(idObT).get()));
+        logger.info("List<Long> {}", attributesId);
 
-        List<Parameter> parameterList=new ArrayList<>();
+        if(objectTypeService.getById(idObT).isPresent()){
+            ObjectType objectType=objectTypeService.getById(idObT).get();
+            for (Long aLong:attributesId){
+                if(attributeService.findById(aLong).isPresent()){
+                    Attribute attribute=attributeService.findById(aLong).get();
+                    List<ObjectType> objectTypes=new ArrayList<>();
+                    objectTypes.add(objectType);
+                    List<Attribute> attributes=new ArrayList<>();
+                    attributes.add(attribute);
 
-        for(int i=0;i<parameters.size();i++){
-            parameters.get(i).setAttribute(attribute);
-            parameterList.add(parameterService.saveParameter(parameters.get(i)));
+                    attribute.setObjectTypes(objectTypes);
+                    attributeService.saveAttribute(attribute);
+
+                    objectType.setAttributes(attributes);
+                    objectTypeService.saveObjectType(objectType);
+                }
+            }
+            logger.info("Go out from method addAttributeInObjectType()");
+
+            return objectType;
         }
-        attribute.setParameters(parameterList);
-        return attributeService.saveAttribute(attribute);
-    }*/
+        logger.info("Go out from method addAttributeInObjectType()");
+
+        return null;
+    }
+
+    @GetMapping("/getObjectsByOT/{id}")
+    public List<Object> getObjectsByOT(@PathVariable("id") Long id) throws JsonProcessingException {
+        logger.info("Enter in method getObjectsByOT()");
+        logger.info("ObjectType {}",mapper.writeValueAsString(objectTypeService.getById(id).get()));
+        logger.info("List<Object> {}",mapper.writeValueAsString(objectTypeService.getById(id).get().getObjects()));
+
+        if(objectTypeService.getById(id).isPresent()){
+            logger.info("Go out from method getObjectsByOT()");
+
+            return objectTypeService.getById(id).get().getObjects();
+        }
+        logger.info("Go out from method getObjectsByOT()");
+
+        return null;
+    }
 }
